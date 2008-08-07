@@ -14,7 +14,7 @@ module DSMemcached
       elsif withs = options.delete(:withs)
         memcache.fetch(
           "#{self}:#{method}:#{withs}".gsub(" ","_"), 
-          :expires_in => 10.seconds
+          :expires_in => options[:expires_in]
         ) { 
           send(method, *withs) 
         }
