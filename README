@@ -1,0 +1,30 @@
+
+
+Installing Memcached
+@topfunky :: http://nubyonrails.com/articles/2006/08/17/memcached-basics-for-rails
+
+Add this to production.rb
+--------------------------------------------------
+require 'cached_model'
+require 'memcacher'
+memcache_options = {
+  :c_threshold => 10_000,
+  :compression => true,
+  :debug => false,
+  :namespace => 'my_rails_app',
+  :readonly => false,
+  :urlencode => false
+}
+CACHE = MemCache.new memcache_options
+CACHE.servers = 'localhost:11211'
+config.action_controller.cache_store = CACHE, {}  
+---------------------------------#
+Usage:
+g = Group.caches(:find_popular)
+g = Group.caches(:find_popular,{
+  :expires_in=>10.seconds
+})
+g = Group.caches(:find_popular,{
+  :expires_in=>10.seconds,
+  :with => {:order=>'group.name'}
+})
